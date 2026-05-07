@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f172a" />
+    <title>DevTools Landing</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="root">
+      <div class="loading">Loading…</div>
+    </div>
+
+    <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/@remix-run/router@1.19.0/dist/router.umd.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-router@6.26.0/dist/umd/react-router.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-router-dom@6.26.0/dist/umd/react-router-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.25.0/babel.min.js"></script>
+
+    <!-- App entry. Babel transpiles the JSX in the browser. -->
+    <script type="text/babel" data-presets="react" src="/js/app.jsx"></script>
+  </body>
+</html>

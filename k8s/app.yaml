@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devtools-app
+  namespace: devtools
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devtools-app
+  template:
+    metadata:
+      labels:
+        app: devtools-app
+    spec:
+      containers:
+        - name: app
+          # Replace with the image pushed by your CI pipeline.
+          image: ghcr.io/your-org/devtools-landing:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: devtools-config
+            - secretRef:
+                name: devtools-secrets
+          readinessProbe:
+            httpGet: { path: /api/health, port: 3000 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /api/health, port: 3000 }
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi"
+            limits:
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devtools-app
+  namespace: devtools
+spec:
+  type: ClusterIP
+  selector:
+    app: devtools-app
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+# Expose externally. Replace host with your domain and add TLS in production.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: devtools-app
+  namespace: devtools
+spec:
+  rules:
+    - host: devtools.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: devtools-app
+                port:
+                  number: 80
